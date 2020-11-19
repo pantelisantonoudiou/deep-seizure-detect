@@ -6,16 +6,10 @@ Created on Tue Sep 29 15:10:48 2020
 """
 
 ### -------- IMPORTS ---------- ###
-import os, sys, json, tables
+import os, json, tables
 from pick import pick
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.widgets import Button, SpanSelector, TextBox
-# User Defined
-parent_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-if ( os.path.join(parent_path,'helper') in sys.path) == False:
-    sys.path.extend([parent_path, os.path.join(parent_path,'helper'),
-                     os.path.join(parent_path,'data_preparation')])
+# User
 from array_helper import find_szr_idx
 ### ------------------------------------------ ####
 
@@ -119,7 +113,7 @@ class UserVerify:
         # Get predictions
         pred_path = os.path.join(self.rawpred_path, file_id) # get path
         bin_pred = np.loadtxt(pred_path, delimiter=',', skiprows=0) # get predictions
-        idx_bounds = find_szr_idx(bin_pred, np.array([0,1])) # find seizure oundaries
+        idx_bounds = find_szr_idx(bin_pred[:,1]>0.5, np.array([0,1])) # find seizure oundaries
            
         # load raw data for visualization
         data_path = os.path.join(self.org_rawpath, file_id.replace('.csv','.h5'))
@@ -132,6 +126,7 @@ class UserVerify:
         
         return data, idx_bounds
                
+    
     def save_emptyidx(self, data_len,file_id):
          """
          Save user predictions to csv file as binary
@@ -148,61 +143,6 @@ class UserVerify:
          np.savetxt(os.path.join(self.verpred_path, file_id), ver_pred, delimiter=',',fmt='%i')
          print('Verified predictions for ', file_id, ' were saved\n')
          
-     
-# Execute if module runs as main program
-if __name__ == '__main__' :
-    
-    # ------>>>>> USER INPUT <<<<<< --------------
-    input_path = r'C:\Users\panton01\Desktop\08-August\5394_5388_5390_5391'
-    # file_id = '082820_5390a.csv'
-    # -------<<<<<<<<<<
-    
-    # create instance
-    obj = UserVerify(input_path)
-    file_id = obj.select_file() # user file selection
-    data, idx_bounds = obj.main_func(file_id) # get data and seizure index
-    
-    if idx_bounds is not False:
-        
-        if idx_bounds.shape[0] == 0: # check for zero seizures
-            obj.save_emptyidx(data.shape[0],file_id)
-            
-        else: # otherwise proceed with gui creation
-    
-            # get gui
-            from verify_gui import matplotGui,fig,ax
-            fig.suptitle('To Submit Press Enter; To Select Drag Mouse Pointer : '+file_id, fontsize=12)
-               
-            # init object
-            callback = matplotGui(data,idx_bounds,obj, file_id)
-            
-            # add buttons
-            axprev = plt.axes([0.625, 0.05, 0.13, 0.075]) # previous
-            bprev = Button(axprev, 'Previous: <')
-            bprev.on_clicked(callback.previous)
-            axnext = plt.axes([0.765, 0.05, 0.13, 0.075]) # next
-            bnext = Button(axnext, 'Next: >')
-            bnext.on_clicked(callback.forward)
-            axaccept = plt.axes([0.125, 0.05, 0.13, 0.075]) # accept
-            baccept = Button(axaccept, 'Accept: y')
-            baccept.on_clicked(callback.accept)
-            axreject = plt.axes([0.265, 0.05, 0.13, 0.075]) # reject
-            breject = Button(axreject, 'Reject: n')
-            breject.on_clicked(callback.reject)
-            axbox = plt.axes([0.5, 0.055, 0.05, 0.05]) # seizure number
-            text_box = TextBox(axbox, 'Szr #', initial='0')
-            text_box.on_submit(callback.submit)
-            
-            # add key press
-            idx_out = fig.canvas.mpl_connect('key_press_event', callback.keypress)
-            
-            # set useblit True on gtkagg for enhanced performance
-            span = SpanSelector(ax, callback.onselect, 'horizontal', useblit=True,
-                rectprops=dict(alpha=0.5, facecolor='red'))
-            plt.show()
-    
-    
-
        
         
         
