@@ -35,11 +35,11 @@ if __name__ == '__main__' :
         else: # otherwise proceed with gui creation
     
             # get gui
-            from user_gui.verify_gui import matplotGui,fig,ax
-            fig.suptitle('To Submit Press Enter; To Select Drag Mouse Pointer : '+file_id, fontsize=12)
+            from user_gui.verify_gui import matplotGui
                
             # init object
             callback = matplotGui(data,idx_bounds,obj, file_id)
+            callback.fig.suptitle('To Submit Press Enter; To Select Drag Mouse Pointer : '+file_id, fontsize=12)
             
             # add buttons
             axprev = plt.axes([0.625, 0.05, 0.13, 0.075]) # previous
@@ -59,9 +59,9 @@ if __name__ == '__main__' :
             text_box.on_submit(callback.submit)
             
             # add key press
-            idx_out = fig.canvas.mpl_connect('key_press_event', callback.keypress)
+            idx_out = callback.fig.canvas.mpl_connect('key_press_event', callback.keypress)
             
             # set useblit True on gtkagg for enhanced performance
-            span = SpanSelector(ax, callback.onselect, 'horizontal', useblit=True,
+            span = SpanSelector(callback.axs[0], callback.onselect, 'horizontal', useblit=True,
                 rectprops=dict(alpha=0.5, facecolor='red'))
             plt.show()
