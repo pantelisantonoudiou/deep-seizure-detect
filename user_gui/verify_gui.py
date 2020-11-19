@@ -5,62 +5,82 @@ Created on Tue Apr 14 10:37:05 2020
 @author: panton01
 """
 
+### ---------------------- IMPORTS ---------------------- ###
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+### ----------------------------------------------------- ###
 
-# get figure and axis
-fig, (ax,ax1,ax2) = plt.subplots(3,1,sharex = True, figsize=(8,8))
+# create figure and axis
+fig, axs = plt.subplots(3,1,sharex = True, figsize=(8,8))
 plt.subplots_adjust(bottom=0.2) # create space for buttons
+fig.text(0.5,0.04,'Time (Sec.)', ha="center")
+fig.text(.05, .5, 'Amp. (V)', ha='center', va='center', rotation='vertical')
 
-ax.spines["top"].set_visible(False)
-ax.spines["right"].set_visible(False)
-ax.spines["bottom"].set_visible(False)
-ax1.spines["top"].set_visible(False)
-ax1.spines["right"].set_visible(False)
-ax1.spines["bottom"].set_visible(False)
-ax2.spines["top"].set_visible(False)
-ax2.spines["right"].set_visible(False)
-
+# remove all axes except left 
+for i in range(axs.shape[0]): 
+    axs[i].spines["top"].set_visible(False)
+    axs[i].spines["right"].set_visible(False)
+    axs[i].spines["bottom"].set_visible(False)
 
 class matplotGui(object):
+    """
+        Matplotlib GUI for user seizure verification.
+    """
     
-    # set internal counter
-    ind = 0
+    ind = 0 # set internal counter
        
-    def __init__(self,data,idx_bounds,obj,file_id):
+    def __init__(self, data, idx_bounds, obj, file_id):
         """   
         Parameters
         ----------
-        data : Numpy array
-
-        idx_bounds : Nupy array (2 columns, 1 = start, 2 = stop index)
-
+        data : 3D Numpy array, (1D = seizure segments, 2D =  columns (samples: window*sampling rate), 3D = channels ) 
+        idx_bounds : 2D Numpy array (1D = seizure segments, 2D, 1 = start, 2 = stop index)
         obj: UserVerify object
-        
-        file_id: String - file anme
+        file_id: Str, file anme
 
         """
         
-        # pass object attributes
-        self.data = data[:,:,0] # data
-        self.data1 = data[:,:,1] # data
-        self.data2 = data[:,:,2] # data
-        
-        self.idx = np.copy(idx_bounds) # original idex
-        self.idx_out = np.copy(idx_bounds) # output idex
-        self.facearray = ['w']*idx_bounds.shape[0] # color list
-        self.bounds = 60 # surrounding region in seconds
-        self.win = obj.win # window (defualt 5 seconds)  
-        self.fs = obj.fs # samplin rate
-        self.verpred_path = obj.verpred_path
-        self.file_id = file_id
+        # pass object attributes to class
+        self.data = data                                        # data
+        self.idx = np.copy(idx_bounds)                          # original index from model
+        self.idx_out = np.copy(idx_bounds)                      # output index
+        self.facearray = ['w']*idx_bounds.shape[0]              # color list
+        self.bounds = 60                                        # surrounding region in seconds
+        self.win = obj.win                                      # window (default 5 seconds)  
+        self.fs = obj.fs                                        # sampling rate
+        self.verpred_path = obj.verpred_path                    # path to store verified predictions
+        self.file_id = file_id                                  # file id
+        self.ch_list = ['vHPC','FC', 'EMG']
         
         # create first plot
         self.plot_data()
+        
+        # # create figure and axis
+        # self.fig, self.axs = plt.subplots(data.shape[2], 1, sharex = True, figsize=(8,8))
+        # plt.subplots_adjust(bottom=0.2) # create space for buttons
+        # self.fig.text(0.5,0.04,'Time (Sec.)', ha="center")
+        # self.fig.text(.05, .5, 'Amp. (V)', ha='center', va='center', rotation='vertical')
+        
+        # # remove all axes except left 
+        # for i in range(self.axs.shape[0]): 
+        #     self.axs[i].spines["top"].set_visible(False)
+        #     self.axs[i].spines["right"].set_visible(False)
+        #     self.axs[i].spines["bottom"].set_visible(False)
     
     @staticmethod
     def get_hours(seconds):
+        """
+
+        Parameters
+        ----------
+        seconds : Int
+
+        Returns
+        -------
+        str : Str
+
+        """
         hours = seconds // 3600
         minutes = (seconds % 3600) // 60
         seconds = seconds % 60
@@ -69,27 +89,27 @@ class matplotGui(object):
         
         
     def save_idx(self):
-           """
-           Save user predictions to csv file as binary
+        """
+        Save user predictions to csv file as binary
 
-           Returns
-           -------
-           None.
+        Returns
+        -------
+        None.
 
-           """
-           # pre allocate file with zeros
-           ver_pred = np.zeros(self.data.shape[0])
+        """
+        # pre allocate file with zeros
+        ver_pred = np.zeros(self.data.shape[0])
 
-   
-           for i in range(self.idx_out.shape[0]): # assign index to 1
-           
-               if self.idx_out[i,0] > 0:
-                   # add 1 to stop bound because of python indexing
-                   ver_pred[self.idx_out[i,0]:self.idx_out[i,1]+1] = 1
-               
-           # save file
-           np.savetxt(os.path.join(self.verpred_path,self.file_id), ver_pred, delimiter=',',fmt='%i')
-           print('Verified predictions for ', self.file_id, ' were saved.\n')    
+
+        for i in range(self.idx_out.shape[0]): # assign index to 1
+        
+            if self.idx_out[i,0] > 0:
+                # add 1 to stop bound because of python indexing
+                ver_pred[self.idx_out[i,0]:self.idx_out[i,1]+1] = 1
+            
+        # save file
+        np.savetxt(os.path.join(self.verpred_path,self.file_id), ver_pred, delimiter=',',fmt='%i')
+        print('Verified predictions for ', self.file_id, ' were saved.\n')    
         
         
     def get_index(self):
@@ -106,12 +126,13 @@ class matplotGui(object):
         
         if self.idx_out[self.i,1] == -1: # if seizure rejected
             self.start = self.idx[self.i,0] # get start
-            self.stop = self.idx[self.i,1] # get stop
+            self.stop = self.idx[self.i,1]+1 # get stop
         else: 
             self.start = self.idx_out[self.i,0] # get start
-            self.stop = self.idx_out[self.i,1] # get stop
+            self.stop = self.idx_out[self.i,1]+1  # get stop
         
-    def plot_data(self,**kwargs):
+        
+    def plot_data(self, **kwargs):
         """
         plot_data(self)
         plot self y and t and mark seizure
@@ -120,40 +141,43 @@ class matplotGui(object):
         # get index, start and stop times
         self.get_index()
         
-        # Plot seizure with nearby 1 minute segments
-        y = self.data[self.start-self.seg : self.stop+self.seg,:].flatten()
-        y1 = self.data1[self.start-self.seg : self.stop+self.seg,:].flatten()
-        y2 = self.data2[self.start-self.seg : self.stop+self.seg,:].flatten()
-        t = np.linspace(self.start-self.seg, self.stop+self.seg,len(y))
-
-        # Plot seizure with surrounding region
-        ax.clear();ax1.clear(); ax2.clear()# clear graph
+        # get seizure time
         timestr = matplotGui.get_hours(self.start*self.win)
         timestr = '#' + str(self.i) + ' - '+ timestr
-        ax.plot(t, y, color='k', linewidth=0.75, alpha=0.9, label= timestr) 
-        ax.set_facecolor(self.facearray[self.i]);ax.legend(loc = 'upper right')
-        ax1.plot(t, y1, color='gray', linewidth=0.75, alpha=0.9)
-        ax2.plot(t, y2, color='gray', linewidth=0.75, alpha=0.9)
         
-        ax.set_title('vHPC', loc ='left')
-        ax1.set_title('Frontal', loc ='left')
-        ax2.set_title('EMG', loc ='left')
-        ax1.set_ylabel('Amp. (V)')
-        ax2.set_xlabel('Time (Sec.)')
-     
-        # concatenate segments
-        if 'usr_start' in kwargs: # plot user define
+        # Get boundaries for highlighted region
+        if 'usr_start' in kwargs:   # plot user define
             start = kwargs['usr_start']; stop = kwargs['usr_stop']
-        else: # plot model defined
+        else:                       # plot model defined
             start = self.start; stop = self.stop
-            
-        y = self.data[start: stop,:].flatten()
-        t = np.linspace(start, stop, len(y))
-        # plot highlighted region
-        ax.plot(t,y, color='orange', linewidth=0.75, alpha=0.9)
-        fig.canvas.draw()
-          
         
+        ###  PLot first channel first with different settings  ###   
+        # get seizure with nearby segments
+        i = 0  # first channel
+        y = self.data[self.start - self.seg : self.stop + self.seg,:, i].flatten()
+        t = np.linspace(self.start - self.seg, self.stop + self.seg, len(y)) # get time
+        axs[i].clear() # clear graph
+        axs[i].plot(t, y, color='k', linewidth=0.75, alpha=0.9, label= timestr) 
+        axs[i].set_facecolor(self.facearray[self.i]);
+        axs[i].legend(loc = 'upper right')
+        axs[i].set_title(self.ch_list[i], loc ='left')
+                 
+        # plot remaining channels    
+        for i in range(1, axs.shape[0]): 
+            # Plot seizure with surrounding region
+            y = self.data[self.start - self.seg : self.stop + self.seg,:, i].flatten()
+            axs[i].clear() # clear graph
+            axs[i].plot(t, y, color='gray', linewidth=0.75, alpha=0.9)
+            axs[i].set_title(self.ch_list[i], loc ='left') # plot channel title
+            
+        ###  Plot highlighted region  ###
+        i = 0  # first channel
+        y = self.data[start: stop,:,i].flatten() # get y values of highlighted region
+        t = np.linspace(start, stop, len(y)) # get time of highlighted region
+        axs[i].plot(t, y, color='orange', linewidth=0.75, alpha=0.9) # plot
+        fig.canvas.draw() # draw
+
+
     ## ------ Mouse Button Press ------ ##   
     def forward(self, event):
         self.ind += 1 # add one to class index
@@ -165,7 +189,7 @@ class matplotGui(object):
         
     def accept(self, event):
         self.facearray[self.i] = 'palegreen'
-        ax.set_facecolor('palegreen')
+        axs[0].set_facecolor('palegreen')
         if self.idx_out[self.i,1] == -1:
             self.idx_out[self.i,:] = self.idx[self.i,:]
         else:
@@ -174,7 +198,7 @@ class matplotGui(object):
         
     def reject(self, event):
         self.facearray[self.i] = 'salmon'
-        ax.set_facecolor('salmon')
+        axs[0].set_facecolor('salmon')
         self.idx_out[self.i,:] = -1
         fig.canvas.draw()
         
@@ -193,7 +217,7 @@ class matplotGui(object):
             self.plot_data() # plot
         if event.key == 'y':
             self.facearray[self.i] = 'palegreen'
-            ax.set_facecolor('palegreen')
+            axs[0].set_facecolor('palegreen')
             if self.idx_out[self.i,1] == -1:
                 self.idx_out[self.i,:] = self.idx[self.i,:]
             else:
@@ -201,7 +225,7 @@ class matplotGui(object):
                 fig.canvas.draw()
         if event.key == 'n':
             self.facearray[self.i] = 'salmon'
-            ax.set_facecolor('salmon')
+            axs[0].set_facecolor('salmon')
             self.idx_out[self.i,:] = -1  
             fig.canvas.draw()
         if event.key == 'enter': 
