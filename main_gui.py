@@ -37,29 +37,37 @@ if __name__ == '__main__' :
             # get gui
             from user_gui.verify_gui import matplotGui
                
-            # init object
+            # init object.
             callback = matplotGui(data,idx_bounds,obj, file_id)
-            callback.fig.suptitle('To Submit Press Enter; To Select Drag Mouse Pointer : '+file_id, fontsize=12)
+            plt.subplots_adjust(bottom=0.15) # create space for buttons
             
-            # add buttons
-            axprev = plt.axes([0.625, 0.05, 0.13, 0.075]) # previous
-            bprev = Button(axprev, 'Previous: <')
-            bprev.on_clicked(callback.previous)
-            axnext = plt.axes([0.765, 0.05, 0.13, 0.075]) # next
-            bnext = Button(axnext, 'Next: >')
-            bnext.on_clicked(callback.forward)
-            axaccept = plt.axes([0.125, 0.05, 0.13, 0.075]) # accept
-            baccept = Button(axaccept, 'Accept: y')
-            baccept.on_clicked(callback.accept)
-            axreject = plt.axes([0.265, 0.05, 0.13, 0.075]) # reject
-            breject = Button(axreject, 'Reject: n')
-            breject.on_clicked(callback.reject)
-            axbox = plt.axes([0.5, 0.055, 0.05, 0.05]) # seizure number
-            text_box = TextBox(axbox, 'Szr #', initial='0')
-            text_box.on_submit(callback.submit)
-            
+            # add title and labels
+            callback.fig.suptitle('To Submit Press Enter; To Select Drag Mouse Pointer : '+file_id, fontsize=12)        # title
+            callback.fig.text(0.5, 0.09,'Time (Sec.)', ha="center")                                                     # xlabel
+            callback.fig.text(.02, .5, 'Amp. (V)', ha='center', va='center', rotation='vertical')                       # ylabel
+            callback.fig.text(0.9, 0.04,'** KEY = Previous : <-, Next: ->, Accept: Y, Reject: N **' ,                   # move/accept labels
+                              ha="right", bbox=dict(boxstyle="square", ec=(1., 1., 1.), fc=(0.9, 0.9, 0.9),))              
+                                                            
             # add key press
             idx_out = callback.fig.canvas.mpl_connect('key_press_event', callback.keypress)
+            
+            # add buttons
+            # axprev = plt.axes([0.625, 0.05, 0.13, 0.075]) # previous
+            # bprev = Button(axprev, 'Previous: <')
+            # bprev.on_clicked(callback.previous)
+            # axnext = plt.axes([0.765, 0.05, 0.13, 0.075]) # next
+            # bnext = Button(axnext, 'Next: >')
+            # bnext.on_clicked(callback.forward)
+            # axaccept = plt.axes([0.125, 0.05, 0.13, 0.075]) # accept
+            # baccept = Button(axaccept, 'Accept: y')
+            # baccept.on_clicked(callback.accept)
+            # axreject = plt.axes([0.265, 0.05, 0.13, 0.075]) # reject
+            # breject = Button(axreject, 'Reject: n')
+            # breject.on_clicked(callback.reject)
+            # axbox = plt.axes([0.5, 0.055, 0.05, 0.05]) # seizure number
+            # text_box = TextBox(axbox, 'Szr #', initial='0')
+            # text_box.on_submit(callback.submit)
+
             
             # set useblit True on gtkagg for enhanced performance
             span = SpanSelector(callback.axs[0], callback.onselect, 'horizontal', useblit=True,
