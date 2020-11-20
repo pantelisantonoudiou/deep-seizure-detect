@@ -11,17 +11,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 ### ----------------------------------------------------- ###
 
-# # create figure and axis
-# fig, axs = plt.subplots(3,1,sharex = True, figsize=(8,8))
-# plt.subplots_adjust(bottom=0.2) # create space for buttons
-# fig.text(0.5,0.04,'Time (Sec.)', ha="center")
-# fig.text(.05, .5, 'Amp. (V)', ha='center', va='center', rotation='vertical')
-
-# # remove all axes except left 
-# for i in range(axs.shape[0]): 
-#     axs[i].spines["top"].set_visible(False)
-#     axs[i].spines["right"].set_visible(False)
-#     axs[i].spines["bottom"].set_visible(False)
 
 class matplotGui(object):
     """
@@ -54,11 +43,8 @@ class matplotGui(object):
         self.ch_list = ['vHPC','FC', 'EMG']
         
         # create figure and axis
-        self.fig, self.axs = plt.subplots(data.shape[2], 1, sharex = True, figsize=(9,9))
-        plt.subplots_adjust(bottom=0.2) # create space for buttons
-        self.fig.text(0.5,0.04,'Time (Sec.)', ha="center")
-        self.fig.text(.1, .5, 'Amp. (V)', ha='center', va='center', rotation='vertical')
-        
+        self.fig, self.axs = plt.subplots(data.shape[2], 1, sharex = True, figsize=(8,8))
+
         # remove all axes except left 
         for i in range(self.axs.shape[0]): 
             self.axs[i].spines["top"].set_visible(False)
@@ -161,6 +147,11 @@ class matplotGui(object):
         self.axs[i].set_facecolor(self.facearray[self.i]);
         self.axs[i].legend(loc = 'upper right')
         self.axs[i].set_title(self.ch_list[i], loc ='left')
+        
+        ###  Plot highlighted region  ###
+        yzoom = self.data[start: stop,:,i].flatten() # get y values of highlighted region
+        tzoom = np.linspace(start, stop, len(yzoom)) # get time of highlighted region
+        self.axs[i].plot(tzoom, yzoom, color='orange', linewidth=0.75, alpha=0.9) # plot
                  
         # plot remaining channels    
         for i in range(1, self.axs.shape[0]): 
@@ -169,12 +160,7 @@ class matplotGui(object):
             self.axs[i].clear() # clear graph
             self.axs[i].plot(t, y, color='gray', linewidth=0.75, alpha=0.9)
             self.axs[i].set_title(self.ch_list[i], loc ='left') # plot channel title
-            
-        ###  Plot highlighted region  ###
-        i = 0  # first channel
-        y = self.data[start: stop,:,i].flatten() # get y values of highlighted region
-        t = np.linspace(start, stop, len(y)) # get time of highlighted region
-        self.axs[i].plot(t, y, color='orange', linewidth=0.75, alpha=0.9) # plot
+        
         self.fig.canvas.draw() # draw
 
 
