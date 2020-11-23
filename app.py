@@ -13,7 +13,7 @@ from user_gui.user_verify import UserVerify
 
 if __name__ == '__main__' :
     
-        # Load config file 
+    # Load config file 
     try:
         # load object properties as dict
         jsonpath = 'config.json' # name of dictionary where propeties are stored
