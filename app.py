@@ -13,18 +13,17 @@ from user_gui.user_verify import UserVerify
 
 if __name__ == '__main__' :
     
-    # Load config file 
+        # Load config file 
     try:
-        config = open('config.json', 'r').read()
-        config = json.loads(config)
+        # load object properties as dict
+        jsonpath = 'config.json' # name of dictionary where propeties are stored
+        openpath = open(jsonpath, 'r').read(); 
+        prop_dict = json.loads(openpath)
     except Exception as err:
         raise FileNotFoundError(f"Unable to read the config file.\n{err}")
-    
-    # Get variables from config dictionary
-    input_path = config['main_path']
 
-    # Create instance
-    obj = UserVerify(input_path)
+    # Create instance for UserVerify class
+    obj = UserVerify(prop_dict)
     file_id = obj.select_file() # user file selection
     data, idx_bounds = obj.main_func(file_id) # get data and seizure index
     
@@ -37,8 +36,8 @@ if __name__ == '__main__' :
             # get gui
             from user_gui.verify_gui import matplotGui
                
-            # init object.
-            callback = matplotGui(data,idx_bounds,obj, file_id)
+            # init gui object
+            callback = matplotGui(data, idx_bounds, obj, file_id)
             plt.subplots_adjust(bottom=0.15) # create space for buttons
             
             # add title and labels
