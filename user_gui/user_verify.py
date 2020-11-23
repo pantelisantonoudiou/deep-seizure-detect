@@ -113,7 +113,7 @@ class UserVerify:
         # Get predictions
         pred_path = os.path.join(self.rawpred_path, file_id) # get path
         bin_pred = np.loadtxt(pred_path, delimiter=',', skiprows=0) # get predictions
-        idx_bounds = find_szr_idx(bin_pred[:,1]>0.5, np.array([0,1])) # find seizure oundaries
+        idx_bounds = find_szr_idx(bin_pred[:,1]>0.5, np.array([0,1])) # find seizure boundaries
            
         # load raw data for visualization
         data_path = os.path.join(self.org_rawpath, file_id.replace('.csv','.h5'))

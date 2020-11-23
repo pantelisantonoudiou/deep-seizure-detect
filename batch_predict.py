@@ -20,7 +20,6 @@ import os, tables, json
 import numpy as np
 from keras.models import load_model
 from tqdm import tqdm
-from sklearn.preprocessing import StandardScaler
 # import matplotlib.pyplot as plt
 from multich_dataPrep import lab2mat
 from path_helper import sep_dir
@@ -39,8 +38,7 @@ class batchPredict:
 
         Parameters
         ----------
-        input_path : STRING
-            Raw data path.
+        input_path : Str, Raw data path.
 
         """
         # pass input path
