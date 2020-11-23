@@ -6,10 +6,6 @@ Created on Thu May  7 10:18:28 2020
 """
 
 
-##    >>>>>>>>> USER INPUT <<<<<<<<          ##
-# Add path to raw data folder in following format -> r'PATH'
-input_path = r'C:\Users\panton01\Desktop\Trina-seizures\3642_3641_3560_3514\raw_data'
-
 # Add path to model
 model_path = r'models\cnn3.h5'
 
@@ -20,9 +16,6 @@ import os, tables, json
 import numpy as np
 from keras.models import load_model
 from tqdm import tqdm
-# import matplotlib.pyplot as plt
-from multich_dataPrep import lab2mat
-from path_helper import sep_dir
 ### ------------------------------------------------------------------------###
 
               
@@ -32,52 +25,42 @@ class batchPredict:
     """
     
     # class constructor (data retrieval)
-    def __init__(self, input_path):
+    def __init__(self):
         """
-        lab2mat(main_path)
+        # class constructor (data retrieval from config.json)
+        
 
-        Parameters
-        ----------
-        input_path : Str, Raw data path.
+        Returns
+        -------
+        None.
 
         """
-        # pass input path
-        self.input_path = input_path
-
-        # Get general and inner paths
-        self.gen_path, innerpath = sep_dir(input_path,1)
         
-        # load object properties as dict
-        jsonfile = 'organized.json'
-        obj_props = lab2mat.load(os.path.join(self.gen_path, jsonfile))
-        self.org_rawpath = obj_props['org_rawpath']
+        # load properties from configuration file
+        jsonpath = os.path.join(self.gen_path, 'config.json') 
+        openpath = open(jsonpath, 'r').read(); 
+        obj_props = json.loads(openpath)
         
-        # create raw pred path
-        rawpred_path = 'raw_predictions'
-        obj_props.update({'rawpred_path' : rawpred_path})
-        self.rawpred_path = os.path.join(self.gen_path, rawpred_path)
+        # Get parent and re-oranized data path 
+        self.gen_path = obj_props['main_path']
+        self.org_rawpath = os.path.join(self.gen_path , obj_props['org_rawpath'])
         
-        # write attributes to json file using a dict
-        jsonpath = os.path.join(self.gen_path, jsonfile)
-        open(jsonpath, 'w').write(json.dumps(obj_props))
+        # Get model path
+        self.model_path = os.path.join(self.gen_path , obj_props['model_path'])
+        
+        # sel channel
+        self.channel_sel
+        
 
-
-    def mainfunc(self,model_path):
+    def mainfunc(self):
         """
-        mainfunc(input_path,model_path,ch_sel)
-    
-        Parameters
-        ----------
-        input_path : String
-            Path to raw data.
-        model_path : String
-            Path to model.
-    
+
+
         """
         
        
         # make path
-        if os.path.exists( self.rawpred_path) is False:
+        if os.path.exists(self.rawpred_path) is False:
             os.mkdir( self.rawpred_path)
         
         # get file list
@@ -85,7 +68,7 @@ class batchPredict:
         filelist = list(filter(lambda k: '.h5' in k, os.listdir(mainpath)))
         
         # load model object to memory to get path
-        model = load_model(model_path)
+        model = load_model(self.model_path)
         
         
         # loop files (multilple channels per file)
@@ -140,10 +123,10 @@ class batchPredict:
 if __name__ == '__main__':
     
     # init object
-    obj = batchPredict(input_path)
+    obj = batchPredict()
     
     # get predictions in binary format and store in csv
-    obj.mainfunc(model_path)    
+    obj.mainfunc()    
     
     
     
