@@ -66,7 +66,7 @@ class batchPredict:
             os.mkdir( self.rawpred_path)
         
         # get file list
-        filelist = list(filter(lambda k: '.h5' in k, os.listdir(self.rawpred_path )))
+        filelist = list(filter(lambda k: '.h5' in k, os.listdir(self.org_rawpath)))
         
         # load model object to memory to get path
         model = load_model(self.model_path)
