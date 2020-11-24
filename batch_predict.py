@@ -18,7 +18,6 @@ class batchPredict:
     Class for batch seizure prediction
     """
     
-    # class constructor (data retrieval)
     def __init__(self):
         """
         Data retrieval from config.json
@@ -47,6 +46,50 @@ class batchPredict:
         # get selected channel
         self.ch_list = prop_dict['ch_list']
         
+        
+    def file_check(self):
+        """
+        Check if files check before prediction
+
+        Returns
+        -------
+        Bool, True if operation successful
+
+        """
+        print ('\n----------------------------------------------------------------------')
+        print ('-> File Check from:', self.gen_path)
+        print ('----------------------------------------------------------------------\n')
+
+        # get file list
+        filelist = list(filter(lambda k: '.h5' in k, os.listdir(self.org_rawpath)))
+        
+        if len(filelist) == 0:
+            print('-> No Files Present.')
+            return False
+
+        # loop files (multilple channels per file)
+        for i in tqdm(range(len(filelist)), desc = 'Progress', file=sys.stdout):
+            try:
+                # get organized data
+                filepath = os.path.join(self.org_rawpath, filelist[i])
+                f = tables.open_file(filepath, mode='r')
+                data_shape = f.root.data.shape
+                f.close()
+       
+                if len(data_shape) != 3: # check if data shape is correct
+                    print(f'\nData shape of file {filelist[i]} is not correct {data_shape}. \nPlease re-arrange to (:, 500, channels).')
+                    return False
+                
+            except Exception as err:
+                raise FileNotFoundError(f'Unable to read file {filelist[i]}.\n{err}\n')
+                return False
+        
+
+        print ('\n----------------------------------------------------------------------')
+        print ('------------------------ File Check Completed ------------------------')
+        print ('----------------------------------------------------------------------\n')
+        return True
+
 
     def mainfunc(self):
         """
@@ -99,8 +142,11 @@ if __name__ == '__main__':
     # init object
     obj = batchPredict()
     
-    # get predictions and store in csv
-    obj.mainfunc()    
+    # if file check successful get predictions
+    if obj.file_check() == True:
+       
+        # get predictions and store in csv
+        obj.mainfunc()    
     
     
     
