@@ -7,11 +7,14 @@ Created on Thu May  7 10:18:28 2020
                
 ### ------------------------ IMPORTS -------------------------------------- ###               
 import os, sys, tables, json
+    
+# set tf verbosity to 2
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
+
 import numpy as np
 from keras.models import load_model
 from tqdm import tqdm
 ### ------------------------------------------------------------------------###
-
               
 class batchPredict:
     """
@@ -113,9 +116,8 @@ class batchPredict:
         
         # load model object to memory to get path
         model = load_model(self.model_path)
-
         
-        # loop files (multilple channels per file)
+        # iterate over files
         for i in tqdm(range(len(filelist)), desc = 'Progress', file=sys.stdout):
             
             # get organized data
@@ -138,7 +140,7 @@ class batchPredict:
     
 # Execute if module runs as main program
 if __name__ == '__main__':
-    
+        
     # init object
     obj = batchPredict()
     
