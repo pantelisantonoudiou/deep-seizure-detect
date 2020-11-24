@@ -21,8 +21,7 @@ class batchPredict:
     # class constructor (data retrieval)
     def __init__(self):
         """
-        class constructor (data retrieval from config.json)
-        
+        Data retrieval from config.json
 
         Returns
         -------
@@ -59,8 +58,9 @@ class batchPredict:
 
         """
         print ('\n----------------------------------------------------------------------')
-        print ('-> Generating predictions from:', self.gen_path,'-----------------------')
+        print ('-> Generating predictions from:', self.gen_path)
         print ('----------------------------------------------------------------------\n')
+        
         # make path
         if os.path.exists(self.rawpred_path) is False:
             os.mkdir( self.rawpred_path)
@@ -70,23 +70,19 @@ class batchPredict:
         
         # load model object to memory to get path
         model = load_model(self.model_path)
-        
-        breakpoint()
+
         
         # loop files (multilple channels per file)
         for i in tqdm(range(len(filelist)), desc = 'Progress', file=sys.stdout):
             
             # get organized data
-            filepath = os.path.join(self.rawpred_path, filelist[i])
+            filepath = os.path.join(self.org_rawpath, filelist[i])
             f = tables.open_file(filepath, mode='r')
             data = f.root.data[:]
             f.close()
             
-            # get data to right format
-            data = data[:, :, self.ch_list].reshape((-1,-1,len(self.ch_list)))
-            
-            # get predictions (1D-array)
-            ypred = model.predict(data) 
+            # get predictions (2D-array)
+            ypred = model.predict(data[:, :, self.ch_list]) 
             
             # save predictions as .csv
             file_id = filelist[i].replace('.h5', '.csv')
