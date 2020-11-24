@@ -21,45 +21,42 @@ class UserVerify:
     """
     
     # class constructor (data retrieval)
-    def __init__(self, input_path):
+    def __init__(self, prop_dict):
         """
         lab2mat(main_path)
 
         Parameters
         ----------
-        input_path : Str, Path to raw data.
+        prop_dict : Dict, Path to raw data.
 
         """
-        # pass general path (parent)
-        self.gen_path = input_path
         
-        # load object properties as dict
-        jsonpath = os.path.join(self.gen_path, 'organized.json') # name of dictionary where propeties are stored
-        openpath = open(jsonpath, 'r').read(); obj_props = json.loads(openpath)
+        # get general path (parent)
+        self.gen_path = prop_dict['main_path']
         
         # get data path
-        self.org_rawpath = os.path.join(self.gen_path, obj_props['org_rawpath'])
+        self.org_rawpath = os.path.join(self.gen_path, prop_dict['org_rawpath'])
         
         # get raw prediction path
-        self.rawpred_path = os.path.join(self.gen_path, obj_props['rawpred_path'])
+        self.rawpred_path = os.path.join(self.gen_path, prop_dict['rawpred_path'])
         
         # create user verified path
         verpred_path = 'verified_predictions'
-        obj_props.update({'verpred_path' : verpred_path})
         self.verpred_path = os.path.join(self.gen_path, verpred_path)
         
-        # write attributes to json file using a dict
-        open(jsonpath, 'w').write(json.dumps(obj_props))
+        # # write attributes to json file using a dict
+        # obj_props.update({'verpred_path' : verpred_path})
+        # open(jsonpath, 'w').write(json.dumps(obj_props))
         
         # make path if it doesn't exist
         if os.path.exists( self.verpred_path) is False:
             os.mkdir( self.verpred_path)
 
         # get sampling rate
-        self.fs = round(obj_props['fs'] / obj_props['down_factor'])
+        self.fs = prop_dict['new_fs']
         
         # get win in seconds
-        self.win = obj_props['win']
+        self.win = prop_dict['win']
    
         
     def select_file(self):
