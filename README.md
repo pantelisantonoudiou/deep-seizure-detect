@@ -46,7 +46,7 @@ Start Anaconda powershell prompt
         # verify seizures
         python app.py
         
-<img src="docs/app-UI.svg" width="500">
+<img src="docs/app-UI.png" width="500">
         
         
         
