@@ -1,0 +1,9 @@
+{"main_path": "C:\\Users\\...\\parent folder",
+"org_rawpath": "reorganized_data", 
+"rawpred_path": "raw_predictions",
+"verpred_path": "verified_predictions",
+"ch_struct": ["vhpc", "fc", "emg"], 
+"ch_list": [0],  
+"win": 5, 
+"fs": 100, 
+"model_path": "models\\cnn1D_3layer.h5"}
