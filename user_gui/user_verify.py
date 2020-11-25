@@ -6,7 +6,7 @@ Created on Tue Sep 29 15:10:48 2020
 """
 
 ### -------- IMPORTS ---------- ###
-import os, json, tables
+import os, tables
 from pick import pick
 import numpy as np
 # User
@@ -41,15 +41,10 @@ class UserVerify:
         self.rawpred_path = os.path.join(self.gen_path, prop_dict['rawpred_path'])
         
         # create user verified path
-        verpred_path = 'verified_predictions'
-        self.verpred_path = os.path.join(self.gen_path, verpred_path)
-        
-        # # write attributes to json file using a dict
-        # obj_props.update({'verpred_path' : verpred_path})
-        # open(jsonpath, 'w').write(json.dumps(obj_props))
+        self.verpred_path = os.path.join(self.gen_path, prop_dict['verpred_path'])
         
         # make path if it doesn't exist
-        if os.path.exists( self.verpred_path) is False:
+        if os.path.exists(self.verpred_path) is False:
             os.mkdir( self.verpred_path)
 
         # get sampling rate
