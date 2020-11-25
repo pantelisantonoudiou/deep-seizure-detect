@@ -15,4 +15,4 @@
 
 <img src="seizure-detect_paths.png" width="400">
 
-**[<< Back to Main Page](/)**
+**[<< Back to Main Page](/README.md)**
