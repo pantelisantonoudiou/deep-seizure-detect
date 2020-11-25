@@ -27,6 +27,7 @@ Offline semi-automated seizure detection using deep learning
         conda install tensorflow-gpu
         
 ---
+
 ## How to use
 
 Start Anaconda powershell prompt
@@ -47,8 +48,11 @@ Start Anaconda powershell prompt
         python app.py
         
 <img src="docs/app-UI.png" width="500">
-        
-        
+
+---        
+## How it works
+
+- check configuration settings -> [here](docs/configuration.md)       
         
         
         
