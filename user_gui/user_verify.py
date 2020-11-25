@@ -53,7 +53,7 @@ class UserVerify:
             os.mkdir( self.verpred_path)
 
         # get sampling rate
-        self.fs = prop_dict['new_fs']
+        self.fs = prop_dict['fs']
         
         # get win in seconds
         self.win = prop_dict['win']
