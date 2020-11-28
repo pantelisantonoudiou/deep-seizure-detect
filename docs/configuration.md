@@ -14,8 +14,9 @@
 ## Path organization
 
 <img src="seizure-detect_paths.png" width="400">
+---
 
-## Data preparation
+## Data Format
 
 The data have to be converted to .h5 files with 3 dimensions.
 
