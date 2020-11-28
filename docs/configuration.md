@@ -11,8 +11,21 @@
     - fs : sampling rate of .h5 files, for the current models needs to be 100
     - model_path : path to model that will generate predictions, set as -> "models\\cnn1D_3layer.h5"
 ---
-## Default paths
+## Path organization
 
 <img src="seizure-detect_paths.png" width="400">
+
+## Data preparation
+
+The data have to be converted to .h5 files with 3 dimensions.
+
+1D = segments, 2D = time points (has to be 500 = 5 seconds * 100 samples per seconds), 3d = channels
+
+*e.g. for ch_struct: ["vhpc", "pfc", "emg"] -> data = (1000, 500, 3)*
+
+
+
+
+
 
 **[<< Back to Main Page](/README.md)**
