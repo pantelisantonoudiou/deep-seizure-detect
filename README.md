@@ -50,9 +50,8 @@ Start Anaconda powershell prompt
 <img src="docs/app-UI.png" width="500">
 
 ---        
-## How it works
-
-- check configuration settings -> [here](docs/configuration.md)       
+## Configuration Settings and file preparation
+- Check the following [document](docs/configuration.md) for configuration settings and file preparation.
         
         
         
