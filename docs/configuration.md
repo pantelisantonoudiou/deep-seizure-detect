@@ -14,6 +14,7 @@
 ## Path organization
 
 <img src="seizure-detect_paths.png" width="400">
+
 ---
 
 ## Data Format
