@@ -51,7 +51,7 @@ Start Anaconda powershell prompt
 
 ---        
 ## Configuration Settings and file preparation
-- Check the following [document](docs/configuration.md) for configuration settings and file preparation.
+Check the following [document](docs/configuration.md) for configuration settings and file preparation.
         
         
         
