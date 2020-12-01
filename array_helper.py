@@ -4,9 +4,13 @@ Created on Thu Mar 26 18:05:34 2020
 
 @author: panton01
 """
+
+### --------------- IMPORTS--------------- ###
 import numpy as np
 from numba import jit
 from scipy import signal
+### -------------------------------------- ###
+
 
 def find_nearest(array,value,**kwargs):
     """
@@ -167,101 +171,7 @@ def merge_close(bounds, merge_margin = 5):
         bounds_out = np.delete(bounds_out, rmv_idx , axis=0) # delete next element
         merge_idx -= rmv_idx.shape[0] # remove one from index because of deleted element 
         
-    return bounds_out
-        
-
-# find matching seizures     
-@jit(nopython=True) 
-def match_szrs(idx_true, idx_pred, err_margin = 5):
-    """
-    match_szrs(idx_true,idx_pred, err_margin)
-
-    Parameters
-    ----------
-    idx_true : Bool, ndarray, User defined (ground truth) boolean index
-    idx_pred : Bool, ndarray, Predicted index
-    err_margin : Int, optional, Default values = 5.
-
-    Returns
-    -------
-    matching : Int, number of matching seizures
-
-    """
-    matching = 0 # number of matching seizures
-    
-    for i in range(idx_true.shape[0]):
-        
-        # does min bound match within error margin?
-        min_bound = np.any(np.abs(np.subtract(idx_true[i,0],idx_pred[:,0]))<err_margin)
-        
-        # does max bound match within error margin?
-        max_bound  = np.any(np.abs(np.subtract(idx_true[i,1],idx_pred[:,1]))<err_margin)
-        
-        # do both bounds match?
-        if max_bound is True & min_bound is True:
-            matching += 1
-            
-    return matching
-
-# find matching seizures method 2 with index 
-@jit(nopython=True) 
-def match_szrs_idx(idx_true, y_pred):
-    """
-    find index of matching seizures
-    
-    Parameters
-    ----------
-    idx_true : np.array, index of true seizures  
-    y_pred : np.array, binary predictions of model
-    
-    Returns
-    -------
-    idx, containing ones or zeros
-    
-    """
-    # create empty vector
-    idx = np.zeros(idx_true.shape[0])
-    
-    for i in range(idx_true.shape[0]):
-        
-        # get predictions in seizure range
-        pred = y_pred[idx_true[i,0]:idx_true[i,1]+1]
-        
-        # get sum of continous predictions > more than 10 seconds
-        sum_continous_segments = np.sum(remove_zeros(pred.copy(), pred, np.array([0,1])))    
-        
-        # pass to index array
-        idx[i] = sum_continous_segments
- 
-    return idx > 0 # convert to logic
-
-
-@jit(nopython=True)  
-def binvector_from_index(idx, length):
-    """
-    Get a binary vector from index numpy array
-    
-    Parameters
-    ----------
-    idx : 2d-Numpy array, Seizure index (rows = seizures, columns = [start, end index])
-    length : Int, Seizure vector length
-    
-    Returns
-    -------
-    pred : 1d- Numpy array
-    """
-
-    # pre allocate file with zeros
-    pred = np.zeros(length)
-    for i in range(idx.shape[0]): # assign index to 1
-        pred[idx[i,0]:idx[i,1]+1] = 1
-    return  pred
-
-
-
-
-
-
+    return bounds_out   
 
 
 
