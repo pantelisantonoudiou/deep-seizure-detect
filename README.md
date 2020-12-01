@@ -1,7 +1,7 @@
 # deep-seizure-detect
-Semi-automated batch seizure detection using deep learning. 
+:snake: Semi-automated batch seizure detection using deep learning. 
 
--> Check out our online :zap: [version](https://github.com/matteocargnelutti/maguire-lab-seizure-detection-webapp) developed by [@matteocargnelutti](https://github.com/matteocargnelutti).
+-> Check out the online [version](https://github.com/matteocargnelutti/maguire-lab-seizure-detection-webapp) :zap: developed by [@matteocargnelutti](https://github.com/matteocargnelutti).
 
 ---
 ## How to install
@@ -62,7 +62,7 @@ chronically epileptic mice that were generated using intra-hippocampal kainate i
  
 ---
 ## Development
-deep-seizure-detect was developed and is maintained by [pantelisantonoudiou](https://github.com/pantelisantonoudiou).
+deep-seizure-detect was developed by [pantelisantonoudiou](https://github.com/pantelisantonoudiou).
 This open-source software is distributed under [the Apache 2.0 License](/LICENSE).
         
         
