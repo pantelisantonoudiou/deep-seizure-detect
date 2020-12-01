@@ -1,5 +1,7 @@
 # deep-seizure-detect
-Offline semi-automated seizure detection using deep learning
+Semi-automated batch seizure detection using deep learning. 
+
+-> Check out our online :zap: [version](https://github.com/matteocargnelutti/maguire-lab-seizure-detection-webapp) developed by [@matteocargnelutti](https://github.com/matteocargnelutti).
 
 ---
 ## How to install
@@ -52,7 +54,16 @@ Start Anaconda powershell prompt
 ---        
 ## Configuration Settings and file preparation
 For configuration settings and file preparation check this guide -> [configuration](docs/configuration.md)
-        
+
+---
+## About the model
+The model is a convolutional neural net that was built using [Keras](https://keras.io/) API with a Tensorflow-backend. It was trained on LFP data from
+chronically epileptic mice that were generated using intra-hippocampal kainate injections by [Dr. Trina Basu](https://twitter.com/trina_basu).
+ 
+---
+## Development
+deep-seizure-detect was developed and is maintained by [pantelisantonoudiou](https://github.com/pantelisantonoudiou).
+This open-source software is distributed under [the Apache 2.0 License](/LICENSE).
         
         
         
