@@ -62,7 +62,7 @@ chronically epileptic mice that were generated using intra-hippocampal kainate i
  
 ---
 ## Development
-deep-seizure-detect was developed by [pantelisantonoudiou](https://github.com/pantelisantonoudiou).
+deep-seizure-detect was developed by [Pantelis Antonoudiou](https://github.com/pantelisantonoudiou).
 This open-source software is distributed under [the Apache 2.0 License](/LICENSE).
         
         
