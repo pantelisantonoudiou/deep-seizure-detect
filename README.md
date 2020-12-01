@@ -7,7 +7,7 @@
 ## How to install
 1) Download and install [miniconda](https://docs.conda.io/en/latest/miniconda.html) on your platform
 2) Clone or Download [deep-seizure-detect](https://github.com/pantelisantonoudiou/deep-seizure-detect)
-3) Start Anaconda powershell prompt, navigate to */deep-seizure-detect*:
+3) Start Anaconda's shell prompt, navigate to */deep-seizure-detect*:
 
         # create conda environment with python version 3.7.7
         conda create --name myenv python=3.7.7     
@@ -32,7 +32,7 @@
 
 ## How to use
 
-Start Anaconda powershell prompt
+Start Anaconda's shell prompt
         
         # navigate to *deep-seizure-detect* folder
         cd ./deep-seizure-detect
