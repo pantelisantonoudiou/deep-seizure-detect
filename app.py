@@ -7,7 +7,7 @@ Created on Wed Sep 30 12:27:27 2020
 ### ---------------------- IMPORTS ---------------------- ###
 import json
 import matplotlib.pyplot as plt
-from matplotlib.widgets import Button, SpanSelector, TextBox
+from matplotlib.widgets import SpanSelector
 from user_gui.user_verify import UserVerify
 ### ----------------------------------------------------- ###
 
@@ -49,24 +49,6 @@ if __name__ == '__main__' :
                                                             
             # add key press
             idx_out = callback.fig.canvas.mpl_connect('key_press_event', callback.keypress)
-            
-            # add buttons
-            # axprev = plt.axes([0.625, 0.05, 0.13, 0.075]) # previous
-            # bprev = Button(axprev, 'Previous: <')
-            # bprev.on_clicked(callback.previous)
-            # axnext = plt.axes([0.765, 0.05, 0.13, 0.075]) # next
-            # bnext = Button(axnext, 'Next: >')
-            # bnext.on_clicked(callback.forward)
-            # axaccept = plt.axes([0.125, 0.05, 0.13, 0.075]) # accept
-            # baccept = Button(axaccept, 'Accept: y')
-            # baccept.on_clicked(callback.accept)
-            # axreject = plt.axes([0.265, 0.05, 0.13, 0.075]) # reject
-            # breject = Button(axreject, 'Reject: n')
-            # breject.on_clicked(callback.reject)
-            # axbox = plt.axes([0.5, 0.055, 0.05, 0.05]) # seizure number
-            # text_box = TextBox(axbox, 'Szr #', initial='0')
-            # text_box.on_submit(callback.submit)
-
             
             # set useblit True on gtkagg for enhanced performance
             span = SpanSelector(callback.axs[0], callback.onselect, 'horizontal', useblit=True,
