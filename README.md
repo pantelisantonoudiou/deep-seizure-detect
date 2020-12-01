@@ -52,7 +52,7 @@ Start Anaconda's shell prompt
 <img src="docs/app-UI.png" width="500">
 
 ---        
-## Configuration Settings and file preparation
+## Configuration settings and file preparation
 For configuration settings and file preparation check this guide -> [configuration](docs/configuration.md)
 
 ---
