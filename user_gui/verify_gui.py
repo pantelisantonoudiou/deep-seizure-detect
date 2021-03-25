@@ -141,7 +141,7 @@ class matplotGui(object):
         # get seizure with nearby segments
         i = 0  # first channel
         y = self.data[self.start - self.seg : self.stop + self.seg,:, i].flatten()
-        t = np.linspace(self.start - self.seg, self.stop + self.seg, len(y)) # get time
+        t = np.linspace(self.start - self.seg, self.stop + self.seg, len(y)) * self.win # get time
         self.axs[i].clear() # clear graph
         self.axs[i].plot(t, y, color='k', linewidth=0.75, alpha=0.9, label= timestr) 
         self.axs[i].set_facecolor(self.facearray[self.i]);
@@ -150,7 +150,7 @@ class matplotGui(object):
         
         ###  Plot highlighted region  ###
         yzoom = self.data[start: stop,:,i].flatten() # get y values of highlighted region
-        tzoom = np.linspace(start, stop, len(yzoom)) # get time of highlighted region
+        tzoom = np.linspace(start, stop, len(yzoom)) * self.win # get time of highlighted region
         self.axs[i].plot(tzoom, yzoom, color='orange', linewidth=0.75, alpha=0.9) # plot
                  
         # plot remaining channels    
