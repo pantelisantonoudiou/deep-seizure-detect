@@ -42,7 +42,7 @@ if __name__ == '__main__' :
             
             # add title and labels
             callback.fig.suptitle('To Submit Press Enter; To Select Drag Mouse Pointer : '+file_id, fontsize=12)        # title
-            callback.fig.text(0.5, 0.09,'Time (Sec.)', ha="center")                                                     # xlabel
+            callback.fig.text(0.5, 0.09,'Time Bins (' + str(prop_dict['win']) + ' Sec.)', ha="center")                                                     # xlabel
             callback.fig.text(.02, .5, 'Amp. (V)', ha='center', va='center', rotation='vertical')                       # ylabel
             callback.fig.text(0.9, 0.04,'** KEY = Previous : <-, Next: ->, Accept: Y, Reject: N **' ,                   # move/accept labels
                               ha="right", bbox=dict(boxstyle="square", ec=(1., 1., 1.), fc=(0.9, 0.9, 0.9),))              
